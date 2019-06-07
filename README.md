@@ -2,8 +2,7 @@
 
 This is a port of the Map Marker Fieldtype by Ryan Cramer. Instead of Google maps it uses Leaflet maps.
 
-Google maps geocoding is still used for geocoding default lat/lng values under *field* settings but the geocoding on page
-editing uses Per Liedmans [leaflet-control-geocoder] (https://github.com/perliedman/leaflet-control-geocoder)
+Geocoding on page editing uses Per Liedmans [leaflet-control-geocoder] (https://github.com/perliedman/leaflet-control-geocoder)
 
 This Fieldtype for ProcessWire holds an address or location name, and automatically geocodes the address to latitude/longitude using leaflet-control-geocoder. The resulting values may be used to populate any kind of map (whether Leaflet Maps or another).
 
