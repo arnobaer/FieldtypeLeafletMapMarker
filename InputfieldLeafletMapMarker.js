@@ -123,7 +123,6 @@ var InputfieldLeafletMapMarker = {
                 map.invalidateSize(true)
             }, 200);
         });
-        */
     }
 };
 
