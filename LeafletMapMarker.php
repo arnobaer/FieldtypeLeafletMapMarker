@@ -80,34 +80,28 @@ class LeafletMapMarker extends WireData {
             return 0;
         }
 
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" . urlencode($this->address);
+        $url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" . urlencode($this->address);
         $json = file_get_contents($url);
         $json = json_decode($json, true);
 
-        if(empty($json['status']) || $json['status'] != 'OK') {
+        if(empty($json) || $json.length < 1) {
             $this->error("Error geocoding address");
-            if(isset($json['status'])) $this->status = (int) array_search($json['status'], $this->geocodeStatuses);
+            $this->status = -2;
             else $this->status = -1;
             $this->lat = 0;
             $this->lng = 0;
             $this->raw = '';
             return $this->status;
         }
-
-        $geometry = $json['results'][0]['geometry'];
-        $location = $geometry['location'];
-        $locationType = $geometry['location_type'];
+        
+        $location = $json[0];
 
         $this->lat = $location['lat'];
-        $this->lng = $location['lng'];
-        $this->raw = json_encode($json['results'][0]);
+        $this->lng = $location['lon'];
+        $this->raw = json_encode($location);
 
-        $statusString = $json['status'] . '_' . $locationType;
-        $status = array_search($statusString, $this->geocodeStatuses);
-        if($status === false) $status = 1; // OK
-
-        $this->status = $status;
-        $this->message("Geocode {$this->statusString}: '{$this->address}'");
+        $this->status = 1;
+        $this->message("Geocode: '{$this->address}'");
 
         return $this->status;
     }
@@ -117,6 +111,6 @@ class LeafletMapMarker extends WireData {
      *
      */
     public function __toString() {
-        return "$this->address ($this->lat, $this->lng, $this->zoom) [$this->statusString]";
+        return "$this->address ($this->lat, $this->lng, $this->zoom);
     }
 }
