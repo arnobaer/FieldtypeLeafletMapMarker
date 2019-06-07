@@ -5,6 +5,8 @@
  *
  */
 class LeafletMapMarker extends WireData {
+    
+    const statusNoGeocode = -100;
 
     protected $geocodedAddress = '';
 
