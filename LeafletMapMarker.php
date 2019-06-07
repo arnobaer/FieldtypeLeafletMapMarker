@@ -110,6 +110,6 @@ class LeafletMapMarker extends WireData {
      *
      */
     public function __toString() {
-        return "$this->address ($this->lat, $this->lng, $this->zoom);
+        return "$this->address ($this->lat, $this->lng, $this->zoom)";
     }
 }
