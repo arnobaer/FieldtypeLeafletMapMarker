@@ -17,10 +17,9 @@ var InputfieldLeafletMapMarker = {
         var options = InputfieldLeafletMapMarker.options;
 
         if(zoom < 1) zoom = 9;
-        //options.center = new google.maps.LatLng(lat, lng);
         options.zoom = parseInt(zoom);
 
-        var map = L.map(document.getElementById(mapId)). setView([lat, lng], options.zoom);
+        var map = L.map(document.getElementById(mapId)).setView([lat, lng], options.zoom);
         L.tileLayer.provider(provider).addTo(map);
 
         var coder = L.Control.Geocoder.nominatim(),
@@ -34,7 +33,6 @@ var InputfieldLeafletMapMarker = {
         ).addTo(map);
 
         var $map = $('#' + mapId);
-        //var $latlng = $map.siblings(".InputfieldLeafletMapMarkerLatLng").find("input[type=text]");
         var $lat = $map.siblings(".InputfieldLeafletMapMarkerLat").find("input[type=text]");
         var $lng = $map.siblings(".InputfieldLeafletMapMarkerLng").find("input[type=text]");
         var $addr = $map.siblings(".InputfieldLeafletMapMarkerAddress").find("input[type=text]");
@@ -115,58 +113,15 @@ var InputfieldLeafletMapMarker = {
             $zoom.val(map.getZoom());
         })
 
-        /*
-           google.maps.event.addListener(map, 'zoom_changed', function() {
-           $zoom.val(map.getZoom());
-           });
-
-           $addr.blur(function() {
-           if(!$toggle.is(":checked")) return true;
-           var geocoder = new google.maps.Geocoder();
-           geocoder.geocode({ 'address': $(this).val()}, function(results, status) {
-           if(status == google.maps.GeocoderStatus.OK && results[0]) {
-           var position = results[0].geometry.location;
-           map.setCenter(position);
-           marker.setPosition(position);
-           $lat.val(position.lat());
-           $lng.val(position.lng());
-           $addrJS.val($addr.val());
-           }
-           $notes.text(status);
-           });
-           return true;
-           });
-
-           $zoom.change(function() {
-           map.setZoom(parseInt($(this).val()));
-           });
-
-           $toggle.click(function() {
-           if($(this).is(":checked")) {
-           $notes.text('Geocode ON');
-        // google.maps.event.trigger(marker, 'dragend');
-        $addr.trigger('blur');
-        } else {
-        $notes.text('Geocode OFF');
-        }
-        return true;
-        });
-
         // added by diogo to solve the problem of maps not rendering correctly in hidden elements
-        // trigger a resize on the map when either the tab button or the toggle field bar are pressed
+        // trigger a invalidateSize on the map when either the tab button or the toggle field bar are pressed
 
-        // get the tab element where this map is integrated
-        var $map = $('#' + mapId);
-        var $tab = $('#_' + $map.closest('.InputfieldFieldsetTabOpen').attr('id'));
-        // get the inputfield where this map is integrated and add the tab to the stack
-        var $inputFields = $map.closest('.Inputfield').find('.InputfieldStateToggle').add($tab);
-
-        $inputFields.on('click',function(){
-        // give it time to open
-        window.setTimeout(function(){
-        google.maps.event.trigger(map,'resize');
-        map.setCenter(options.center);
-        }, 200);
+        // quite lazy, refresh map when a tab link is clicked
+        $('#PageEditTabs a').on('click',function(){
+            window.setTimeout(function(){
+                // Refresh map on
+                map.invalidateSize(true)
+            }, 200);
         });
         */
     }
