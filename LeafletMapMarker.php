@@ -6,27 +6,6 @@
  */
 class LeafletMapMarker extends WireData {
 
-    const statusNoGeocode = -100;
-
-    protected $geocodeStatuses = array(
-
-        0 => 'N/A',
-        1 => 'OK',
-        2 => 'OK_ROOFTOP',
-        3 => 'OK_RANGE_INTERPOLATED',
-        4 => 'OK_GEOMETRIC_CENTER',
-        5 => 'OK_APPROXIMATE',
-
-        -1 => 'UNKNOWN',
-        -2 => 'ZERO_RESULTS',
-        -3 => 'OVER_QUERY_LIMIT',
-        -4 => 'REQUEST_DENIED',
-        -5 => 'INVALID_REQUEST',
-
-        -100 => 'Geocode OFF', // RCD
-
-    );
-
     protected $geocodedAddress = '';
 
     public function __construct() {
@@ -53,7 +32,6 @@ class LeafletMapMarker extends WireData {
 
         } else if($key == 'status') {
             $value = (int) $value;
-            if(!isset($this->geocodeStatuses[$value])) $value = -1; // -1 = unknown
         } else if($key == 'zoom') {
             $value = (int) $value;
         } else if($key == 'provider') {
@@ -64,7 +42,7 @@ class LeafletMapMarker extends WireData {
     }
 
     public function get($key) {
-        if($key == 'statusString') return str_replace('_', ' ', $this->geocodeStatuses[$this->status]);
+        if($key == 'statusString') return $this->status);
         return parent::get($key);
     }
 
@@ -81,12 +59,21 @@ class LeafletMapMarker extends WireData {
         }
 
         $url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" . urlencode($this->address);
-        $json = file_get_contents($url);
-        $json = json_decode($json, true);
+        // Supply header with User-Agent required by nominatim.org API
+        $opts = [
+            "http" => [
+                'header' => "User-Agent: User-Agent: Mozilla/5.0\r\n",
+            ]
+        ];
+        $context = stream_context_create($opts);
+
+        // Open the file using the HTTP headers set above
+        $file = file_get_contents($url, false, $context);
+        $json = json_decode($file, true);
 
         if(empty($json) || sizeof($json) < 1) {
             $this->error("Error geocoding address");
-            $this->status = -2;
+            $this->status = -1;
             $this->lat = 0;
             $this->lng = 0;
             $this->raw = '';
