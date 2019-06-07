@@ -114,6 +114,7 @@ var InputfieldLeafletMapMarker = {
         });
 
         // usability, click on map to enable zoom
+        map.scrollWheelZoom.disable();
         map.on('focus', function(){
             map.scrollWheelZoom.enable();
         });
@@ -127,7 +128,6 @@ var InputfieldLeafletMapMarker = {
         // quite lazy, refresh map when a tab link is clicked
         $('#PageEditTabs a').on('click',function(){
             window.setTimeout(function(){
-                // Refresh map on
                 map.invalidateSize(true)
             }, 200);
         });
