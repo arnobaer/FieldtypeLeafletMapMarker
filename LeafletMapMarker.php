@@ -84,7 +84,7 @@ class LeafletMapMarker extends WireData {
         $json = file_get_contents($url);
         $json = json_decode($json, true);
 
-        if(empty($json) || $json.length < 1) {
+        if(empty($json) || sizeof($json) < 1) {
             $this->error("Error geocoding address");
             $this->status = -2;
             $this->lat = 0;
