@@ -111,7 +111,15 @@ var InputfieldLeafletMapMarker = {
 
         map.on('zoomend', function(event){
             $zoom.val(map.getZoom());
-        })
+        });
+
+        // usability, click on map to enable zoom
+        map.on('focus', function(){
+            map.scrollWheelZoom.enable();
+        });
+        map.on('blur', function(){
+            map.scrollWheelZoom.disable();
+        });
 
         // added by diogo to solve the problem of maps not rendering correctly in hidden elements
         // trigger a invalidateSize on the map when either the tab button or the toggle field bar are pressed
