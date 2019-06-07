@@ -42,7 +42,7 @@ class LeafletMapMarker extends WireData {
     }
 
     public function get($key) {
-        if($key == 'statusString') return $this->status);
+        if($key == 'statusString') return $this->status;
         return parent::get($key);
     }
 
